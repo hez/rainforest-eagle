@@ -1,7 +1,7 @@
 defmodule RainforestEagle.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.2.0"
 
   def project do
     [
@@ -27,8 +27,8 @@ defmodule RainforestEagle.MixProject do
       {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false},
       {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
       # Everything else
-      {:httpoison, "~> 1.6"},
-      {:telemetry, "~> 0.4.1"}
+      {:telemetry, "~> 0.4.1"},
+      {:tesla, "~> 1.3.0"}
     ]
   end
 end

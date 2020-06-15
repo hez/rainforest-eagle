@@ -1,27 +1,30 @@
 defmodule RainforestEagle do
   require Logger
 
+  @default_path "/cgi-bin/post_manager"
   @headers [{"content-type", "text/xml"}]
   @mac_template_id "$MAC$"
   @current_summation_request "<Command><Name>get_current_summation</Name><MacId>#{
                                @mac_template_id
                              }</MacId></Command>"
+  @current_summation_response_tag "SummationDelivered"
 
-  def current_summation(mac), do: @current_summation_request |> insert_mac(mac) |> send()
+  def current_summation, do: @current_summation_request |> insert_mac() |> send() |> get_usage()
 
   def send(cmd) do
     config = config()
+    path = Keyword.get(config, :path, @default_path)
 
     config
-    |> Keyword.get(:url)
-    |> HTTPoison.post(cmd, headers(config))
-    |> get_response_body()
+    |> client()
+    |> Tesla.post(path, cmd)
   end
 
-  def get_usage({:ok, xml}), do: get_usage(xml)
-  def get_usage(xml), do: get_hex_value(xml, "SummationDelivered")
+  def get_usage(resp), do: get_hex_value(resp, @current_summation_response_tag)
 
-  def get_hex_value(xml, tag) do
+  def get_hex_value({:ok, %{status: 200, body: xml}}, tag), do: get_hex_value(xml, tag)
+
+  def get_hex_value(xml, tag) when is_binary(xml) and is_binary(tag) do
     ~r/<#{tag}>0x(?<value>.*)<\/#{tag}>/
     |> Regex.named_captures(xml)
     |> Map.get("value")
@@ -32,16 +35,16 @@ defmodule RainforestEagle do
   def config, do: Application.get_env(:rainforest_eagle, :connection, [])
   def mac_id, do: Keyword.get(config(), :mac_id)
 
-  defp get_response_body({:ok, %{body: body}}), do: {:ok, body}
-  defp get_response_body(resp), do: resp
+  defp insert_mac(cmd), do: String.replace(cmd, @mac_template_id, mac_id())
 
-  defp headers(config) do
-    List.insert_at(
-      @headers,
-      0,
-      {"authorization", "Basic #{Base.encode64(Keyword.get(config, :basic_auth))}"}
-    )
+  defp client(config) do
+    middleware = [
+      {Tesla.Middleware.BaseUrl, Keyword.get(config, :host)},
+      {Tesla.Middleware.Headers, @headers},
+      {Tesla.Middleware.BasicAuth,
+       %{username: Keyword.get(config, :username), password: Keyword.get(config, :password)}}
+    ]
+
+    Tesla.client(middleware)
   end
-
-  defp insert_mac(cmd, mac), do: String.replace(cmd, @mac_template_id, mac)
 end

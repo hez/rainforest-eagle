@@ -22,10 +22,7 @@ defmodule RainforestEagle.Server do
   def handle_info(:refresh, state) do
     schedule_refresh()
 
-    reading =
-      RainforestEagle.mac_id()
-      |> RainforestEagle.current_summation()
-      |> RainforestEagle.get_usage()
+    reading = RainforestEagle.current_summation()
 
     Logger.info("#{__MODULE__} reading #{reading}")
     :telemetry.execute([:sensor, :rainforest_eagle, :read], %{usage: reading}, %{})

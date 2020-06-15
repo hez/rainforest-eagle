@@ -9,7 +9,7 @@ Note: Only tested on the original Eagle and currently only has been tested with 
 ```elixir
 def deps do
   [
-    {:rainforest_eagle, github: "hez/rainforest-eagle"}
+    {:rainforest_eagle, github: "hez/rainforest-eagle", tag: "v0.2.0"}
   ]
 end
 ```
@@ -21,8 +21,10 @@ Config, add the following to your config/* file.
 ```
 config :rainforest_eagle, :connection,
   mac_id: "somemac",
-  url: "http://[host]/cgi-bin/post_manager",
-  basic_auth: "user:pass"
+  host: "http://192.168.0.1",
+  username: "some",
+  password "auth-info"
+
 ```
 
 Code
