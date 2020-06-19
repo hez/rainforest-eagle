@@ -23,7 +23,8 @@ config :rainforest_eagle, :connection,
   mac_id: "somemac",
   host: "http://192.168.0.1",
   username: "some",
-  password "auth-info"
+  password "auth-info",
+  refresh_interval:  30 * 60 # defaults to 120 seconds
 
 ```
 
@@ -34,16 +35,15 @@ defmodule MyApp.Application do
   ....
 
   def start(_type, _args) do
-    Logger.info("Starting HomeHub!")
+    children = [...]
 
-    children = [
-      RainforestEagle.Server
-    ]
+    RainforestEagle.Telemetry.start_polling()
+    # ....
   end
 end
 
 defmodule MyApp.EnergyLogger do
-  def log_usage([:sensor, :rainforest_eagle, :read], measurements, metadata, _conf) do
+  def log_usage([:rainforest_eagle, :read], measurements, metadata, _conf) do
     IO.puts(inspect(measurements))
   end
 

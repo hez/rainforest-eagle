@@ -33,6 +33,7 @@ defmodule RainforestEagle do
   end
 
   def config, do: Application.get_env(:rainforest_eagle, :connection, [])
+  def interval, do: Keyword.get(config(), :refresh_interval, 120)
   def mac_id, do: Keyword.get(config(), :mac_id)
 
   defp insert_mac(cmd), do: String.replace(cmd, @mac_template_id, mac_id())

@@ -28,6 +28,7 @@ defmodule RainforestEagle.MixProject do
       {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
       # Everything else
       {:telemetry, "~> 0.4.1"},
+      {:telemetry_poller, "~> 0.5.0"},
       {:tesla, "~> 1.3.0"}
     ]
   end
