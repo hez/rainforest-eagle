@@ -32,13 +32,14 @@ Code
 
 ```
 defmodule MyApp.Application do
-  ....
+  use Application
 
   def start(_type, _args) do
-    children = [...]
-
-    RainforestEagle.Telemetry.start_polling()
-    # ....
+    children = [
+      # ...
+      RainforestEagle.Telemetry.child_config()
+    ]
+    Supervisor.start_link(children, opts)
   end
 end
 
