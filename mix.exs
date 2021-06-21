@@ -7,7 +7,7 @@ defmodule RainforestEagle.MixProject do
     [
       app: :rainforest_eagle,
       version: @version,
-      elixir: "~> 1.10",
+      elixir: "~> 1.11",
       start_permanent: Mix.env() == :prod,
       deps: deps()
     ]
@@ -24,12 +24,12 @@ defmodule RainforestEagle.MixProject do
   defp deps do
     [
       # Dev only
-      {:credo, "~> 1.4.0", only: [:dev, :test], runtime: false},
-      {:dialyxir, "~> 1.0.0-rc.4", only: :dev, runtime: false},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dialyxir, "~> 1.1", only: :dev, runtime: false},
       # Everything else
-      {:telemetry, "~> 0.4.1"},
+      {:telemetry, "~> 0.4"},
       {:telemetry_poller, "~> 0.5.0"},
-      {:tesla, "~> 1.3.0"}
+      {:tesla, "~> 1.4"}
     ]
   end
 end

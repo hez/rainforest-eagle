@@ -7,16 +7,14 @@ defmodule RainforestEagle.Telemetry do
         Logger.error("Got invalid result from server: #{i}, ignoring.")
 
       i ->
-        IO.inspect(i)
-        :telemetry.execute([:rainforest_eagle, :read], %{usage: i}, %{}) |> IO.inspect()
+        :telemetry.execute([:rainforest_eagle, :read], %{usage: i}, %{})
     end
   end
 
-  def start_polling do
-    :telemetry_poller.start_link(
-      measurements: [{__MODULE__, :fetch_usage, []}],
-      period: :timer.seconds(RainforestEagle.interval()),
-      name: :rainforest_eagle
-    )
+  def child_config do
+    {:telemetry_poller,
+     measurements: [{__MODULE__, :fetch_usage, []}],
+     period: :timer.seconds(RainforestEagle.interval()),
+     name: :rainforest_eagle}
   end
 end
