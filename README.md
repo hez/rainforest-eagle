@@ -9,7 +9,7 @@ Note: Only tested on the original Eagle and currently only has been tested with 
 ```elixir
 def deps do
   [
-    {:rainforest_eagle, github: "hez/rainforest-eagle", tag: "v0.2.0"}
+    {:rainforest_eagle, github: "hez/rainforest-eagle", tag: "v0.4.0"}
   ]
 end
 ```
